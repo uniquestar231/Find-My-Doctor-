@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Doctor - Yannick Live Server</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(135deg, #eef2ff, #f8fafc); color: #1f2937; }
+        .container { max-width: 700px; margin: 50px auto; background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+        h1 { margin-top: 0; color: #2563eb; text-align: center; }
+        p.subtitle { text-align: center; color: #6b7280; margin-bottom: 24px; }
+        label { display: block; margin: 14px 0 6px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        textarea { resize: vertical; min-height: 120px; }
+        button { margin-top: 18px; width: 100%; padding: 12px; border: none; border-radius: 10px; background: #2563eb; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+        .result { margin-top: 28px; padding: 20px; background: #f8fafc; border-left: 5px solid #2563eb; border-radius: 10px; }
+        .result h2 { margin-top: 0; margin-bottom: 16px; color: #2563eb; }
+        .field { margin: 8px 0; }
+        .label { font-weight: bold; color: #374151; }
+        .value { color: #111827; }
+        .warning { background: #fef3c7; border-left-color: #f59e0b; color: #92400e; padding: 12px; margin-top: 16px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find My Doctor</h1>
+        <p class="subtitle">Enter your details and symptoms to get a simple recommendation. Works with Yannick Live Server!</p>
+
+        <form id="doctorForm">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g. Yannick" required>
+
+            <label for="address">Address or ZIP code</label>
+            <input type="text" id="address" name="address" placeholder="e.g. Harlem, NY" required>
+
+            <label for="problem">Describe the issue</label>
+            <textarea id="problem" name="problem" placeholder="e.g. chest pain, dizziness, stomach pain" required></textarea>
+
+            <button type="submit">Get Recommendation</button>
+        </form>
+
+        <div id="result" class="result" style="display: none;">
+            <h2>Your Recommendation</h2>
+            <div class="field"><span class="label">Name:</span> <span id="resultName" class="value"></span></div>
+            <div class="field"><span class="label">Address/ZIP:</span> <span id="resultAddress" class="value"></span></div>
+            <div class="field"><span class="label">Issue:</span> <span id="resultProblem" class="value"></span></div>
+            <div class="field"><span class="label">Recommended doctor:</span> <span id="resultRecommendation" class="value"></span></div>
+            <div class="warning">
+                ⚠️ This is for educational use only. Always consult a real doctor for medical advice.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your triage logic (same as Python)
+        function triage(problem) {
+            const text = problem.toLowerCase();
+            
+            if (text.includes("chest pain") || text.includes("can't breathe") || text.includes("cant breathe") ||
+                text.includes("difficulty breathing") || text.includes("severe bleeding") ||
+                text.includes("passed out") || text.includes("unconscious")) {
+                return "Your symptoms sound serious. You should go to urgent care or the emergency room right away.";
+            }
+            
+            if (text.includes("seizure") || text.includes("migraine") || text.includes("bad headache") ||
+                text.includes("numbness") || text.includes("dizzy") || text.includes("dizziness")) {
+                return "You should see a neurologist for these symptoms.";
+            }
+            
+            if (text.includes("palpitations") || text.includes("heart racing") ||
+                text.includes("shortness of breath") || text.includes("heart problem") || text.includes("heart issues")) {
+                return "You should see a cardiologist for these symptoms.";
+            }
+            
+            if (text.includes("stomach") || text.includes("belly") || text.includes("abdomen") ||
+                text.includes("nausea") || text.includes("vomit") || text.includes("vomiting") || text.includes("diarrhea")) {
+                return "You can start with a primary care doctor or a gastroenterologist.";
+            }
+            
+            return "You can start with a primary care doctor. If it gets worse or feels like an emergency, go to urgent care.";
+        }
+
+        // Form handler
+        document.getElementById('doctorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const problem = document.getElementById('problem').value;
+            
+            const recommendation = triage(problem);
+            
+            // Show results
+            document.getElementById('resultName').textContent = name;
+            document.getElementById('resultAddress').textContent = address;
+            document.getElementById('resultProblem').textContent = problem;
+            document.getElementById('resultRecommendation').textContent = recommendation;
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

@@ -70,7 +70,7 @@ DOCTORS_DB = [
         "next_update": "2026-02-25",
         "claim": "Specialist in migraine and seizure disorders.",
         "ratings": [4, 4],
-    },
+    }
 ]
 
 def avg_rating(ratings):
